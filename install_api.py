@@ -1,23 +1,17 @@
-import github_api
+import requests
 
-api_key = install_api()
+def install_api():
+    """
+    Устанавливает API GitHub на локальную машину.
+    """
 
-github = github_api.GitHubAPI(api_key)
+    response = requests.get("https://api.github.com/install")
+    if response.status_code != 200:
+        raise Exception(f"Ошибка установки API: {response.status_code}")
 
-# Получить список репозиториев пользователя
-repos = github.get_repos()
+    json_data = json.loads(response.content.decode())
+    api_key = json_data["api_key"]
 
-# Получить информацию о репозитории
-repo = github.get_repo("bard-api")
+    print(f"API-ключ: {api_key}")
 
-# Создать новый репозиторий
-github.create_repo("my-new-repo")
-
-# Добавить файл в репозиторий
-github.add_file("my-file.txt", "Hello, world!")
-
-# Коммитить изменения
-github.commit("Add my-file.txt")
-
-# Запушить изменения в репозиторий
-github.push()
+    return api_key
