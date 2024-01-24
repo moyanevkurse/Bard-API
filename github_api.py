@@ -50,3 +50,18 @@ class GitHubAPI:
         return self.request("GET", "/repos/<username>/<repo_name>")
 
     # ... Другие методы API ...
+
+def create_repo(self, name, description):
+    """
+        Создает новый репозиторий.
+
+        Args:
+            name: Имя репозитория.
+            description: Описание репозитория.
+
+        Returns:
+            Информация о созданном репозитории.
+        """
+
+    data = {"name": name, "description": description}
+    return self.request("POST", "/user/repos", data=json.dumps(data))
