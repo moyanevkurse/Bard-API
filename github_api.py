@@ -2,8 +2,9 @@ import requests
 
 class GitHubAPI:
 
-    def __init__(self, api_key):
+    def __init__(self, api_key, token=None):
         self.api_key = api_key
+        self.token = token
 
     def request(self, method, path, params=None):
         """
@@ -18,7 +19,8 @@ class GitHubAPI:
             Ответ API.
         """
 
-        response = requests.request(method, "https://api.github.com/" + path, params=params, headers={"Authorization": f"Bearer {self.api_key}"})
+        headers = {"Authorization": f"Bearer {self.token}" if self.token else f"Bearer {self.api_key}"}
+        response = requests.request(method, "https://api.github.com/" + path, params=params, headers=headers)
         if response.status_code != 200:
             raise Exception(f"Ошибка API: {response.status_code}")
 
@@ -46,3 +48,5 @@ class GitHubAPI:
         """
 
         return self.request("GET", "/repos/<username>/<repo_name>")
+
+    # ... Другие методы API ...
